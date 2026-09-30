@@ -1,28 +1,56 @@
-# backend/ — sengaja kosong
+# Backend - API Pemesanan Shuttle Kampus
 
-Kamu yang mengisi folder ini, mulai Sesi 2.
+Layanan backend berbasis **FastAPI** dan **Uvicorn** untuk mengelola sesi pemesanan shuttle di area kampus. Data disimpan in-memory, sehingga kembali ke kondisi awal setiap server di-restart.
 
-Sesi 2, yang harus ada di sini sebelum kamu keluar:
+> Panduan menjalankan seluruh aplikasi (backend + frontend) dan verifikasi tiap requirement ada di [`README.md`](../README.md) pada root project.
 
-```
+## Struktur folder
+
+```text
 backend/
-├── requirements.txt    # fastapi, uvicorn
-└── app/
-    ├── __init__.py
-    └── main.py         # FastAPI() + GET /health -> 200 {"status": "ok"}
+├── app/
+│   ├── __init__.py
+│   ├── data.py         # dataset sintetis in-memory (12 baris)
+│   ├── main.py         # aplikasi FastAPI, middleware CORS, endpoint
+│   └── schemas.py      # schema Pydantic untuk validasi request/response
+└── requirements.txt    # dependensi Python
 ```
 
-Titik mulai:
+## Menjalankan server
+
+Dari root project:
 
 ```bash
 cd backend
-python -m venv venv
-source venv/bin/activate        # Windows: venv\Scripts\activate
-pip install fastapi uvicorn
-pip freeze > requirements.txt
-uvicorn app.main:app --reload
+python -m venv venv          # sekali saja, jika venv belum ada
+
+# Windows CMD:
+venv\Scripts\activate
+# macOS / Linux:
+# source venv/bin/activate
+
+pip install -r requirements.txt
+uvicorn app.main:app --reload --port 8000
 ```
 
-`venv/` tidak di-commit — sudah diatur di `.gitignore`.
+Server aktif di `http://localhost:8000`. Jalankan `uvicorn` dari dalam folder `backend/`, karena `app.main` dicari relatif terhadap folder tersebut.
 
-Hapus berkas ini kalau sudah tidak perlu.
+## Endpoint
+
+| Method | Endpoint | Fungsi | Status |
+|---|---|---|---|
+| GET | `/health` | cek server hidup | `200` |
+| GET | `/sessions` | daftar sesi; query `page`, `limit`, `search` | `200` |
+| GET | `/sessions/{id}` | detail sesi berdasarkan ID | `200` / `404` |
+| POST | `/sessions` | tambah sesi baru (divalidasi Pydantic) | `201` / `422` |
+| DELETE | `/sessions/{id}` | hapus sesi berdasarkan ID | `204` / `404` |
+
+## Dokumentasi interaktif
+
+Swagger UI di `http://localhost:8000/docs` dipakai untuk mencoba tiap endpoint langsung dari browser.
+
+Cek cepat dari terminal:
+
+```bash
+curl -i http://localhost:8000/health
+```
