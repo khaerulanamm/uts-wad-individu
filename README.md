@@ -6,7 +6,7 @@ Aplikasi web untuk mencatat dan mengelola sesi pemesanan shuttle di area kampus 
 Backend **FastAPI**, frontend **Vue 3 + Vite**, data disimpan in-memory.
 
 - **Pengembang:** M. Maulana Khaerul Anam
-- **NIM:** `<isi NIM>`
+- **NIM:** 25120500032
 - **Program Studi:** S1 Sains Data
 - **Domain:** Transportasi Kampus (pemesanan shuttle)
 
